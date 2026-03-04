@@ -1,20 +1,34 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
-import { get } from 'http';
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  ParseBoolPipe,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { CreatePropertyDto } from './dto/createProperty.dto';
 
 @Controller('property')
 export class PropertyController {
   @Get()
   findAll() {
-    return 'This action returns all properties';
+    return 'All properties';
   }
 
-  @Get(':id/:star')
-  findOne(@Param('id') id, @Param('star') star) {
-    return `id = ${id} star = ${star}`;
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id, @Query('sort', ParseBoolPipe) sort) {
+    console.log(typeof id);
+    console.log(typeof sort);
+    return id;
   }
 
   @Post()
-  create() {
-    return 'This action creates a new property';
+  @HttpCode(202)
+  create(@Body() body: CreatePropertyDto) {
+    return body;
   }
 }
